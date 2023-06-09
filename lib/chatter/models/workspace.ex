@@ -5,8 +5,9 @@ defmodule Chatter.Models.Workspace do
   alias Chatter.Accounts.User
   alias Chatter.Models.Member
   alias Chatter.Models.Channel
+  alias Chatter.Iconify
 
-  @required_fields ~w(name icon_path creator_id)a
+  @required_fields ~w(name creator_id)a
 
   schema "workspaces" do
     field :name, :string
@@ -24,8 +25,13 @@ defmodule Chatter.Models.Workspace do
     |> cast(attrs, @required_fields)
     |> validate_required(@required_fields)
     |> unique_constraint(:name)
+    |> generate_icon_path()
   end
 
-  def create_icon_path do
+  defp generate_icon_path(changeset) do
+    case get_change(changeset, :name) do
+      nil -> changeset
+      name -> put_change(changeset, :icon_path, Iconify.make_icon(name))
+    end
   end
 end
