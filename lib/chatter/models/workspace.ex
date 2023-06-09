@@ -25,4 +25,7 @@ defmodule Chatter.Models.Workspace do
     |> validate_required(@required_fields)
     |> unique_constraint(:name)
   end
+
+  def create_icon_path do
+  end
 end
