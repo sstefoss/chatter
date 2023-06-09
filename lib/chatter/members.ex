@@ -1,4 +1,6 @@
 defmodule Chatter.Members do
+  alias Chatter.Models.Member
+
   def change_member(%Member{} = _member, _attrs \\ %{}) do
   end
 

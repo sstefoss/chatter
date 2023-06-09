@@ -1,4 +1,6 @@
 defmodule Chatter.Messages do
+  alias Chatter.Models.Message
+
   def change_message(%Message{} = _message, _attrs \\ %{}) do
   end
 
@@ -11,7 +13,7 @@ defmodule Chatter.Messages do
   def create_message_in_channel(_channel_id, %Message{} = _message) do
   end
 
-  def create_direct_message(_to_user, %Message{} = _message) = do
+  def create_direct_message(_to_user, %Message{} = _message) do
   end
 
   def update_message(%Message{} = _message, _attrs) do
@@ -19,5 +21,4 @@ defmodule Chatter.Messages do
 
   def delete_message(%Message{} = _message) do
   end
-
 end

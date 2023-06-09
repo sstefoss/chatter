@@ -1,4 +1,6 @@
 defmodule Chatter.Channels do
+  alias Chatter.Models.Channel
+
   def change_channel(%Channel{} = _channel, _attrs \\ %{}) do
   end
 

@@ -1,4 +1,6 @@
 defmodule Chatter.Workspaces do
+  alias Chatter.Models.Workspace
+
   def change_workspace(%Workspace{} = _workspace, _attrs \\ %{}) do
   end
 
