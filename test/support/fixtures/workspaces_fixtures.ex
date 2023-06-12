@@ -19,7 +19,7 @@ defmodule Chatter.WorkspacesFixtures do
     {:ok, workspace} =
       attrs
       |> valid_workspace_attributes()
-      |> Chatter.Workspaces.create_workspace()
+      |> Workspaces.create_workspace()
 
     workspace
   end

@@ -1,21 +1,30 @@
 defmodule Chatter.Members do
+  alias Chatter.Repo
   alias Chatter.Models.Member
 
-  def change_member(%Member{} = _member, _attrs \\ %{}) do
+  def change_member(%Member{} = member, attrs \\ %{}) do
+    Member.changeset(member, attrs)
   end
 
-  def list_members_for_workspace(_workspace_id) do
+  def create_member(attrs \\ %{}) do
+    %Member{}
+    |> Member.changeset(attrs)
+    |> Repo.insert()
   end
 
-  def create_member_for_workspace(_workspace_id, %Member{} = _member) do
+  def get_member(id), do: Repo.get!(Member, id)
+
+  def update_member(%Member{} = member, attrs) do
+    member
+    |> Member.changeset(attrs)
+    |> Repo.update()
   end
 
-  def update_member(%Member{} = _member, _attrs) do
+  def archive_member(%Member{} = member) do
+    member
+    |> Member.changeset(%{is_archived: true})
+    |> Repo.update()
   end
 
-  def archive_member(%Member{} = _member) do
-  end
-
-  def delete_member(%Member{} = _member) do
-  end
+  def delete_member(%Member{} = member), do: Repo.delete(member)
 end
