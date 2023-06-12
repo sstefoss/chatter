@@ -5,6 +5,7 @@ defmodule Chatter.Models.Channel do
   alias Chatter.Models.Workspace
   alias Chatter.Models.Member
   alias Chatter.Models.Participant
+  alias Chatter.Models.Message
 
   @required_fields ~w(name workspace_id creator_id)a
   @optional_fields ~w(description is_archived is_public)a
