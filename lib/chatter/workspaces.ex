@@ -11,6 +11,11 @@ defmodule Chatter.Workspaces do
     user.workspaces
   end
 
+  def list_members_for_workspace(id) do
+    workspace = Repo.get(Workspace, id)
+    Repo.preload(workspace, :members).members
+  end
+
   def get_workspace(id), do: Repo.get!(Workspace, id)
 
   def create_workspace(attrs \\ %{}) do

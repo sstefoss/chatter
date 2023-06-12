@@ -102,6 +102,26 @@ defmodule Chatter.WorkspacesTest do
     end
   end
 
+  describe "list_members_for_workspace/1" do
+    test "returns the members of the workspace" do
+      user1 = user_fixture()
+      user2 = user_fixture()
+
+      {:ok, workspace} =
+        Workspaces.create_workspace_with_user(
+          %{
+            name: "Workspace 1",
+            creator_id: user1.id
+          },
+          user1
+        )
+
+      Workspaces.add_user_in_workspace(workspace, user2, :member)
+
+      assert length(Workspaces.list_members_for_workspace(workspace.id)) == 2
+    end
+  end
+
   describe "update_workspace/2" do
     test "updates a workspace with the given attributes" do
       user = user_fixture()
