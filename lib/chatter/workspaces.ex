@@ -3,7 +3,8 @@ defmodule Chatter.Workspaces do
   alias Chatter.Models.Workspace
   alias Chatter.Accounts.User
 
-  def change_workspace(%Workspace{} = _workspace, _attrs \\ %{}) do
+  def change_workspace(%Workspace{} = workspace, attrs \\ %{}) do
+    Workspace.changeset(workspace, attrs)
   end
 
   def list_workspaces_for_user(%User{} = user) do
