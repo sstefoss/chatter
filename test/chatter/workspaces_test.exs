@@ -47,21 +47,13 @@ defmodule Chatter.WorkspacesTest do
   end
 
   describe "add_user_in_workspace/2" do
-    test "creates a workspace with a user and adds another one" do
-      user = user_fixture()
-      user2 = user_fixture()
-
-      {:ok, %Workspace{} = workspace} =
-        Workspaces.create_workspace_with_user(
-          %{
-            name: "Workspace 1",
-            creator_id: user.id
-          },
-          user
-        )
+    test "creates a workspace with a creator and adds another one" do
+      creator = user_fixture()
+      member = user_fixture()
+      workspace = workspace_with_user_fixture(creator)
 
       assert {:ok, %Workspace{} = workspace} =
-               Workspaces.add_user_in_workspace(workspace, user2, :member)
+               Workspaces.add_user_in_workspace(workspace, member, :member)
 
       assert length(Repo.preload(workspace, :users).users) == 2
     end
@@ -79,24 +71,8 @@ defmodule Chatter.WorkspacesTest do
   describe "list_workspaces_for_user/1" do
     test "returns the workspaces for the logged in user" do
       user = user_fixture()
-
-      {:ok, workspace1} =
-        Workspaces.create_workspace_with_user(
-          %{
-            name: "Workspace 1",
-            creator_id: user.id
-          },
-          user
-        )
-
-      {:ok, workspace2} =
-        Workspaces.create_workspace_with_user(
-          %{
-            name: "Workspace 2",
-            creator_id: user.id
-          },
-          user
-        )
+      workspace1 = workspace_with_user_fixture(user)
+      workspace2 = workspace_with_user_fixture(user)
 
       assert Workspaces.list_workspaces_for_user(user) == [workspace1, workspace2]
     end
@@ -104,19 +80,11 @@ defmodule Chatter.WorkspacesTest do
 
   describe "list_members_for_workspace/1" do
     test "returns the members of the workspace" do
-      user1 = user_fixture()
-      user2 = user_fixture()
+      creator = user_fixture()
+      member = user_fixture()
 
-      {:ok, workspace} =
-        Workspaces.create_workspace_with_user(
-          %{
-            name: "Workspace 1",
-            creator_id: user1.id
-          },
-          user1
-        )
-
-      Workspaces.add_user_in_workspace(workspace, user2, :member)
+      workspace = workspace_with_user_fixture(creator)
+      Workspaces.add_user_in_workspace(workspace, member, :member)
 
       assert length(Workspaces.list_members_for_workspace(workspace.id)) == 2
     end

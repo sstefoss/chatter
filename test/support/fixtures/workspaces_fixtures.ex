@@ -4,6 +4,9 @@ defmodule Chatter.WorkspacesFixtures do
   entities via the `Chatter.Workspaces` context.
   """
 
+  alias Chatter.Accounts.User
+  alias Chatter.Workspaces
+
   def unique_workspace_name, do: "team #{System.unique_integer()}"
 
   def valid_workspace_attributes(attrs \\ %{}) do
@@ -17,6 +20,19 @@ defmodule Chatter.WorkspacesFixtures do
       attrs
       |> valid_workspace_attributes()
       |> Chatter.Workspaces.create_workspace()
+
+    workspace
+  end
+
+  def workspace_with_user_fixture(%User{} = user) do
+    {:ok, workspace} =
+      Workspaces.create_workspace_with_user(
+        %{
+          name: unique_workspace_name(),
+          creator_id: user.id
+        },
+        user
+      )
 
     workspace
   end
