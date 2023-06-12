@@ -15,7 +15,8 @@ defmodule Chatter.Models.Workspace do
     belongs_to :creator, User
 
     has_many :channels, Channel, on_delete: :delete_all
-    many_to_many :users, User, join_through: Member
+    has_many :members, Member
+    has_many :users, through: [:members, :user]
 
     timestamps()
   end
@@ -26,6 +27,13 @@ defmodule Chatter.Models.Workspace do
     |> validate_required(@required_fields)
     |> unique_constraint(:name)
     |> generate_icon_path()
+  end
+
+  def changeset_update_user(workspace, user, role) do
+    workspace
+    |> cast(%{}, [:name])
+    |> validate_required([:name])
+    |> put_assoc(:members, [%{user: user, role: role} | workspace.members])
   end
 
   defp generate_icon_path(changeset) do
