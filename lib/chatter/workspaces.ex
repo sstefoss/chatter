@@ -28,7 +28,7 @@ defmodule Chatter.Workspaces do
     {:ok, workspace} = create_workspace(attrs)
 
     Repo.preload(workspace, :users)
-    |> Workspace.changeset_update_user(user, :admin)
+    |> Workspace.changeset_update_users(user, :admin)
     |> Repo.update()
 
     {:ok, workspace}
@@ -36,7 +36,7 @@ defmodule Chatter.Workspaces do
 
   def add_user_in_workspace(%Workspace{} = workspace, %User{} = user, role) do
     Repo.preload(workspace, :users)
-    |> Workspace.changeset_update_user(user, role)
+    |> Workspace.changeset_update_users(user, role)
     |> Repo.update()
 
     {:ok, workspace}

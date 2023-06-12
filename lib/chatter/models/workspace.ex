@@ -29,10 +29,8 @@ defmodule Chatter.Models.Workspace do
     |> generate_icon_path()
   end
 
-  def changeset_update_user(workspace, user, role) do
+  def changeset_update_users(workspace, user, role) do
     workspace
-    |> cast(%{}, [:name])
-    |> validate_required([:name])
     |> put_assoc(:members, [%{user: user, role: role} | workspace.members])
   end
 
