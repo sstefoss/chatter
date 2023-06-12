@@ -2,8 +2,10 @@ defmodule Chatter.Models.Member do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Chatter.Accounts.User
   alias Chatter.Models.Workspace
-  alias Chatter.Models.User
+  alias Chatter.Models.Participant
+  alias Chatter.Models.Channel
 
   @required_fields ~w(workspace_id user_id)a
   @optional_fields ~w(username fullname avatar role is_archived)a
@@ -17,6 +19,8 @@ defmodule Chatter.Models.Member do
 
     belongs_to :workspace, Workspace
     belongs_to :user, User
+
+    many_to_many :channels, Channel, join_through: Participant
 
     timestamps()
   end
