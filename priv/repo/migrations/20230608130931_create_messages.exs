@@ -5,8 +5,8 @@ defmodule Chatter.Repo.Migrations.CreateMessages do
     create table(:messages) do
       add :text, :text, null: false
       add :sender_id, references(:members), null: false
-      add :recipient_id, references(:members), null: false
-      add :channel_id, references(:channels, on_delete: :delete_all)
+      add :recipient_id, references(:members), null: true
+      add :channel_id, references(:channels, on_delete: :delete_all), null: true
 
       timestamps()
     end
