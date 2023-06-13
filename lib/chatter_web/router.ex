@@ -73,6 +73,7 @@ defmodule ChatterWeb.Router do
 
     live_session :current_user,
       on_mount: [{ChatterWeb.UserAuth, :mount_current_user}] do
+      live "/", HomeLive
       live "/users/confirm/:token", UserConfirmationLive, :edit
       live "/users/confirm", UserConfirmationInstructionsLive, :new
     end
