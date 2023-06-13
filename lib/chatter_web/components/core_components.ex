@@ -214,8 +214,7 @@ defmodule ChatterWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
+        "phx-submit-loading:opacity-75 btn",
         @class
       ]}
       {@rest}
@@ -401,10 +400,10 @@ defmodule ChatterWeb.CoreComponents do
     ~H"""
     <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
       <div>
-        <h1 class="text-lg font-semibold leading-8 text-gray-200">
+        <h1 class="mb-4 text-4xl tracking-tight font-extrabold dark:text-white">
           <%= render_slot(@inner_block) %>
         </h1>
-        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-gray-400">
+        <p :if={@subtitle != []} class="mt-2 leading-6 text-gray-200">
           <%= render_slot(@subtitle) %>
         </p>
       </div>

@@ -2,4 +2,28 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+@layer components {
+  .btn {
+    @apply 
+      block
+      rounded-lg 
+      bg-orange-600 
+      hover:bg-orange-700 
+      text-center
+      py-3 
+      px-4 
+      font-semibold
+      text-white 
+      active:text-white/80;
+  }
+
+  .btn-sm {
+    @apply
+      text-sm 
+      font-semibold    
+      py-2 
+      px-3
+  }
+}
+
 /* This file is for your main application CSS */
