@@ -17,12 +17,6 @@ defmodule ChatterWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", ChatterWeb do
-    pipe_through :browser
-
-    get "/", PageController, :home
-  end
-
   # Other scopes may use custom stacks.
   # scope "/api", ChatterWeb do
   #   pipe_through :api
@@ -52,6 +46,7 @@ defmodule ChatterWeb.Router do
 
     live_session :redirect_if_user_is_authenticated,
       on_mount: [{ChatterWeb.UserAuth, :redirect_if_user_is_authenticated}] do
+      live "/", HomeLive
       live "/users/register", UserRegistrationLive, :new
       live "/users/log_in", UserLoginLive, :new
       live "/users/reset_password", UserForgotPasswordLive, :new
