@@ -642,4 +642,15 @@ defmodule ChatterWeb.CoreComponents do
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
+
+  attr(:class, :string, default: nil)
+  slot(:inner_block, required: true)
+
+  def card(assigns) do
+    ~H"""
+    <div class={["border border-gray-700 bg-gray-800 p-10 rounded-lg", @class]}>
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
 end
