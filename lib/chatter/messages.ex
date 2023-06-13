@@ -1,24 +1,24 @@
 defmodule Chatter.Messages do
+  alias Chatter.Repo
   alias Chatter.Models.Message
 
-  def change_message(%Message{} = _message, _attrs \\ %{}) do
+  def change_message(%Message{} = message, attrs \\ %{}) do
+    Message.changeset(message, attrs)
   end
 
-  def list_messages_for_channel(_channel_id) do
+  def get_message(id), do: Repo.get!(Message, id)
+
+  def create_message(attrs \\ %{}) do
+    %Message{}
+    |> Message.changeset(attrs)
+    |> Repo.insert()
   end
 
-  def list_direct_messages_for_user(_user_id, _from_user_id) do
+  def update_message(%Message{} = message, attrs) do
+    message
+    |> Message.changeset(attrs)
+    |> Repo.update()
   end
 
-  def create_message_in_channel(_channel_id, %Message{} = _message) do
-  end
-
-  def create_direct_message(_to_user_id, %Message{} = _message) do
-  end
-
-  def update_message(%Message{} = _message, _attrs) do
-  end
-
-  def delete_message(%Message{} = _message) do
-  end
+  def delete_message(%Message{} = message), do: Repo.delete(message)
 end

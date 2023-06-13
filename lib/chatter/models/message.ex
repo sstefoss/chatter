@@ -5,8 +5,8 @@ defmodule Chatter.Models.Message do
   alias Chatter.Models.Member
   alias Chatter.Models.Channel
 
-  @required_fields ~w(text sender_id recipient_id)a
-  @optional_fields ~w(channel_id)a
+  @required_fields ~w(text sender_id)a
+  @optional_fields ~w(channel_id recipient_id)a
 
   schema "messages" do
     field :text, :string

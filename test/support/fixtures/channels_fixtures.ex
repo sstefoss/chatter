@@ -7,6 +7,7 @@ defmodule Chatter.ChannelsFixtures do
   import Chatter.WorkspacesFixtures
   import Chatter.AccountsFixtures
 
+  alias Chatter.Models.Workspace
   alias Chatter.Workspaces
   alias Chatter.Channels
 
@@ -24,6 +25,22 @@ defmodule Chatter.ChannelsFixtures do
   def channel_fixture() do
     creator = user_fixture()
     workspace = workspace_with_user_fixture(creator)
+    member = hd(Workspaces.list_members_for_workspace(workspace.id))
+
+    valid_attrs = %{
+      workspace_id: workspace.id,
+      creator_id: member.id
+    }
+
+    {:ok, channel} =
+      valid_attrs
+      |> valid_channel_attributes()
+      |> Channels.create_channel()
+
+    channel
+  end
+
+  def channel_fixture(%Workspace{} = workspace) do
     member = hd(Workspaces.list_members_for_workspace(workspace.id))
 
     valid_attrs = %{
