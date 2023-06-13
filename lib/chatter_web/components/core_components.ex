@@ -652,4 +652,15 @@ defmodule ChatterWeb.CoreComponents do
     </div>
     """
   end
+
+  attr(:class, :string, default: nil)
+  slot(:inner_block, required: true)
+
+  def center(assigns) do
+    ~H"""
+    <div class={["flex items-center justify-center h-full", @class]}>
+      <div><%= render_slot(@inner_block) %></div>
+    </div>
+    """
+  end
 end
