@@ -86,7 +86,7 @@ defmodule Chatter.WorkspacesTest do
       workspace = workspace_with_user_fixture(creator)
       Workspaces.add_user_in_workspace(workspace, member, :member)
 
-      assert length(Workspaces.list_members_for_workspace(workspace.id)) == 2
+      assert length(Workspaces.list_members_for_workspace(workspace)) == 2
     end
   end
 

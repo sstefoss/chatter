@@ -29,7 +29,7 @@ defmodule Chatter.ChannelsTest do
     test "creates a channel with valid data" do
       creator = user_fixture()
       workspace = workspace_with_user_fixture(creator)
-      member = hd(Workspaces.list_members_for_workspace(workspace.id))
+      member = hd(Workspaces.list_members_for_workspace(workspace))
 
       valid_attrs = %{
         description: "some description",
