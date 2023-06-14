@@ -16,7 +16,6 @@ defmodule ChatterWeb.WorkspacesViewLive do
 
     members = Workspaces.list_members_for_workspace(active_workspace)
     active_member = hd(members)
-    IO.inspect(members)
 
     channels = Workspaces.list_channels_for_workspace(active_workspace)
     active_channel = hd(channels)
@@ -63,12 +62,18 @@ defmodule ChatterWeb.WorkspacesViewLive do
       </div>
       <div class="flex flex-col flex-1">
         <div class="flex-none py-2 px-6 border-b border-slate-700 flex items-center">
-          <div class="text-gray-200 text-lg font-semibold">
-            # <%= @active_channel.name %>
-          </div>
-          <div class="text-gray-400 ml-6 text-sm">
-            <%= @active_channel.description %>
-          </div>
+          <%= if @active_channel != nil do %>
+            <div class="text-gray-200 text-lg font-semibold">
+              # <%= @active_channel.name %>
+            </div>
+            <div class="text-gray-400 ml-6 text-sm">
+              <%= @active_channel.description %>
+            </div>
+          <% else %>
+            <div class="text-gray-200 text-lg font-semibold">
+              # <%= @active_member.username %>
+            </div>
+          <% end %>
         </div>
         <div class="flex-1 p-6">messages</div>
         <div class="flex-none p-6">
@@ -124,7 +129,7 @@ defmodule ChatterWeb.WorkspacesViewLive do
       <li :for={channel <- @channels}>
         <.link
           patch={~p"/workspaces/#{@active_workspace}/channels/#{channel}"}
-          class={"#{if channel.id == @active_channel.id, do: "bg-slate-300 text-slate-800", else: "hover:bg-slate-700"} rounded px-4 py-0.5 w-full block hover:cursor-pointer"}
+          class={"#{if @active_channel != nil and channel.id == @active_channel.id, do: "bg-slate-300 text-slate-800", else: "hover:bg-slate-700"} rounded px-4 py-0.5 w-full block hover:cursor-pointer"}
         >
           # <%= channel.name %>
         </.link>
