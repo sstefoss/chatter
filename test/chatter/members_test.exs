@@ -32,6 +32,21 @@ defmodule Chatter.MembersTest do
       assert member.role == member.role
     end
 
+    test "creates a member and generates username generated from email" do
+      creator = user_fixture()
+      workspace = workspace_with_user_fixture(creator)
+      user_fix = user_fixture()
+
+      valid_attrs = %{
+        user_id: user_fix.id,
+        workspace_id: workspace.id,
+        role: :member
+      }
+
+      assert {:ok, %Member{} = member} = Members.create_member(valid_attrs)
+      assert String.contains?(user_fix.email, member.username)
+    end
+
     test "fails to create a member with invalid attributes" do
       invalid_attrs = %{
         username: "stef",

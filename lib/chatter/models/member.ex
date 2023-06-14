@@ -2,6 +2,7 @@ defmodule Chatter.Models.Member do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Chatter.Accounts
   alias Chatter.Accounts.User
   alias Chatter.Models.Workspace
   alias Chatter.Models.Participant
@@ -29,7 +30,32 @@ defmodule Chatter.Models.Member do
     member
     |> cast(attrs, @required_fields ++ @optional_fields)
     |> validate_required(@required_fields)
+    |> check_username()
     |> unique_constraint([:user_id, :workspace_id], name: :members_user_id_workspace_id_index)
     |> unique_constraint([:workspace_id, :username], name: :members_workspace_id_username_index)
+  end
+
+  def check_username(changeset) do
+    case get_change(changeset, :username) do
+      nil -> generate_username(changeset)
+      _ -> changeset
+    end
+  end
+
+  def generate_username(changeset) do
+    case get_change(changeset, :user_id) do
+      nil ->
+        changeset
+
+      user_id ->
+        user = Accounts.get_user!(user_id)
+
+        username =
+          user.email
+          |> String.split("@")
+          |> hd()
+
+        put_change(changeset, :username, username)
+    end
   end
 end
