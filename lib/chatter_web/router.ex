@@ -62,6 +62,9 @@ defmodule ChatterWeb.Router do
       on_mount: [{ChatterWeb.UserAuth, :ensure_authenticated}] do
       live "/workspaces", WorkspacesLive
       live "/workspaces/create", WorkspacesCreateLive
+      live "/workspaces/:id", WorkspacesViewLive, :workspace
+      live "/workspaces/:id/members/:member_id", WorkspacesViewLive, :members
+      live "/workspaces/:id/channels/:channel_id", WorkspacesViewLive, :channels
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
     end
