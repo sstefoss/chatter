@@ -90,4 +90,15 @@ defmodule Chatter.MembersTest do
       assert_raise Ecto.NoResultsError, fn -> Members.get_member(member.id) end
     end
   end
+
+  describe "get_member_for_user_in_workspace/2" do
+    test "returns the related member instance from a user in a workspace" do
+      creator = user_fixture()
+      workspace = workspace_with_user_fixture(creator)
+
+      member = Members.get_member_for_user_in_workspace(creator, workspace)
+      assert member.workspace_id == workspace.id
+      assert member.user_id == creator.id
+    end
+  end
 end
