@@ -18,7 +18,7 @@ defmodule ChatterWeb.WorkspacesCreateLive do
       <.simple_form
         for={@workspace_form}
         id="workspace_form"
-        phx-submit="create_workspace"
+        phx-submit="launch_workspace"
         class="mt-8"
       >
         <.input field={@workspace_form[:name]} label="Name" name="name" required />
@@ -30,7 +30,7 @@ defmodule ChatterWeb.WorkspacesCreateLive do
     """
   end
 
-  def handle_event("create_workspace", %{"name" => name}, socket) do
+  def handle_event("launch_workspace", %{"name" => name}, socket) do
     user = socket.assigns.current_user
 
     attrs = %{
@@ -38,9 +38,9 @@ defmodule ChatterWeb.WorkspacesCreateLive do
       creator_id: user.id
     }
 
-    case Workspaces.create_workspace_with_user(
-           attrs,
-           user
+    case Workspaces.launch_new_workspace(
+           user,
+           attrs
          ) do
       {:ok, workspace} ->
         {:noreply,
