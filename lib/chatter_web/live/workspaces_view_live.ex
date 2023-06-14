@@ -2,6 +2,8 @@ defmodule ChatterWeb.WorkspacesViewLive do
   use ChatterWeb, :live_view
 
   alias Chatter.Workspaces
+  alias Chatter.Channels
+  alias Chatter.Members
   alias Chatter.Models.Workspace
   alias ChatterWeb.WorkspacesListLive
   alias ChatterWeb.ChannelsCreateLive
@@ -30,12 +32,14 @@ defmodule ChatterWeb.WorkspacesViewLive do
      )}
   end
 
-  def handle_params(%{"channel_id" => channel_id, "id" => workspace_id}, uri, socket) do
-    {:noreply, socket}
+  def handle_params(%{"channel_id" => channel_id, "id" => _}, uri, socket) do
+    channel = Channels.get_channel(channel_id)
+    {:noreply, assign(socket, active_channel: channel, active_member: nil)}
   end
 
-  def handle_params(%{"member_id" => channel_id, "id" => workspace_id}, uri, socket) do
-    {:noreply, socket}
+  def handle_params(%{"member_id" => member_id, "id" => _}, uri, socket) do
+    member = Members.get_member(member_id)
+    {:noreply, assign(socket, active_member: member, active_channel: nil)}
   end
 
   def handle_params(_, _, socket), do: {:noreply, socket}
