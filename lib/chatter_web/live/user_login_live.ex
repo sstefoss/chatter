@@ -5,7 +5,7 @@ defmodule ChatterWeb.UserLoginLive do
     ~H"""
     <div class="flex justify-center items-center h-full">
       <.card class="max-w-xl">
-        <.header class="text-center">
+        <.header class="mb-6">
           Sign in to account
           <:subtitle>
             Don't have an account?

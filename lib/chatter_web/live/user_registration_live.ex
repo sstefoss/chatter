@@ -8,7 +8,7 @@ defmodule ChatterWeb.UserRegistrationLive do
     ~H"""
     <div class="flex justify-center items-center h-full">
       <.card class="max-w-xl">
-        <.header class="text-center">
+        <.header class="mb-6">
           Register for an account
           <:subtitle>
             Already registered?
