@@ -11,7 +11,7 @@ defmodule Chatter.Channels do
     Repo.preload(channel, :messages).messages
   end
 
-  def list_participants(%Channel{} = channel) do
+  def list_participants(%Channel{} = _channel) do
   end
 
   def get_channel(id), do: Repo.get!(Channel, id)

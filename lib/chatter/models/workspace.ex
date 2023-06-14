@@ -31,7 +31,14 @@ defmodule Chatter.Models.Workspace do
 
   def changeset_add_user(workspace, user, role) do
     workspace
+    |> changeset(%{})
     |> put_assoc(:members, [%{user: user, role: role} | workspace.members])
+  end
+
+  def changeset_add_channel(workspace, channel) do
+    workspace
+    |> changeset(%{})
+    |> put_assoc(:channels, [channel | workspace.channels])
   end
 
   defp generate_icon_path(changeset) do

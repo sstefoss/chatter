@@ -46,6 +46,23 @@ defmodule Chatter.WorkspacesTest do
     end
   end
 
+  describe "launch_new_workspace/2" do
+    test "creates a workspace with admin and two default channels" do
+      user = user_fixture()
+
+      assert {:ok, workspace} =
+               Workspaces.launch_new_workspace(
+                 user,
+                 %{
+                   name: "Workspace 1",
+                   creator_id: user.id
+                 }
+               )
+
+      assert length(Workspaces.list_channels_for_workspace(workspace)) == 2
+    end
+  end
+
   describe "add_user_in_workspace/2" do
     test "creates a workspace with a creator and adds another one" do
       creator = user_fixture()
