@@ -26,12 +26,12 @@ defmodule Chatter.WorkspacesFixtures do
 
   def workspace_with_user_fixture(%User{} = user) do
     {:ok, workspace} =
-      Workspaces.create_workspace_with_user(
+      Workspaces.launch_new_workspace(
+        user,
         %{
           name: unique_workspace_name(),
           creator_id: user.id
-        },
-        user
+        }
       )
 
     workspace

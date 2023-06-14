@@ -4,7 +4,7 @@ defmodule Chatter.Workspaces do
   alias Chatter.Models.Channel
   alias Chatter.Accounts.User
   alias Chatter.Members
-  alias Chatter.Models
+  alias Chatter.Models.Member
 
   def change_workspace(%Workspace{} = workspace, attrs \\ %{}) do
     Workspace.changeset(workspace, attrs)
@@ -31,16 +31,6 @@ defmodule Chatter.Workspaces do
     |> Repo.insert()
   end
 
-  def create_workspace_with_user(attrs \\ %{}, %User{} = user) do
-    {:ok, workspace} = create_workspace(attrs)
-
-    Repo.preload(workspace, :users)
-    |> Workspace.changeset_add_user(user, :admin)
-    |> Repo.update()
-
-    {:ok, workspace}
-  end
-
   def launch_new_workspace(%User{} = user, attrs \\ %{}) do
     with {:ok, workspace} <- create_workspace(attrs),
          {:ok, workspace} <- add_user_in_workspace(workspace, user, :admin),
@@ -63,8 +53,16 @@ defmodule Chatter.Workspaces do
   end
 
   def add_user_in_workspace(%Workspace{} = workspace, %User{} = user, role) do
-    Repo.preload(workspace, :users)
-    |> Workspace.changeset_add_user(user, role)
+    member =
+      Members.change_member(%Member{}, %{
+        workspace_id: workspace.id,
+        user_id: user.id,
+        user: user,
+        role: role
+      })
+
+    Repo.preload(workspace, :members)
+    |> Workspace.changeset_add_member(member)
     |> Repo.update()
 
     {:ok, workspace}
