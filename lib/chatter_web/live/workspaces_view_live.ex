@@ -5,8 +5,10 @@ defmodule ChatterWeb.WorkspacesViewLive do
   alias Chatter.Channels
   alias Chatter.Members
   alias Chatter.Models.Workspace
+
   alias ChatterWeb.WorkspacesListLive
   alias ChatterWeb.ChannelsCreateLive
+  alias ChatterWeb.MessagesCreateLive
 
   def mount(_, _, socket) do
     current_user = socket.assigns.current_user
@@ -31,12 +33,12 @@ defmodule ChatterWeb.WorkspacesViewLive do
      )}
   end
 
-  def handle_params(%{"channel_id" => channel_id, "id" => _}, uri, socket) do
+  def handle_params(%{"channel_id" => channel_id, "id" => _}, _uri, socket) do
     channel = Channels.get_channel(channel_id)
     {:noreply, assign(socket, active_channel: channel, active_member: nil)}
   end
 
-  def handle_params(%{"member_id" => member_id, "id" => _}, uri, socket) do
+  def handle_params(%{"member_id" => member_id, "id" => _}, _uri, socket) do
     member = Members.get_member(member_id)
     {:noreply, assign(socket, active_member: member, active_channel: nil)}
   end
@@ -77,7 +79,14 @@ defmodule ChatterWeb.WorkspacesViewLive do
         </div>
         <div class="flex-1 p-6">messages</div>
         <div class="flex-none p-6">
-          <input class="w-full" />
+          <.live_component
+            id={:create_message}
+            module={MessagesCreateLive}
+            current_user={@current_user}
+            active_member={@active_member}
+            active_channel={@active_channel}
+            live_action={@live_action}
+          />
         </div>
       </div>
     </div>
