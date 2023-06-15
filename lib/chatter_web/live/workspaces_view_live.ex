@@ -4,6 +4,7 @@ defmodule ChatterWeb.WorkspacesViewLive do
   alias Chatter.Workspaces
   alias Chatter.Channels
   alias Chatter.Members
+  alias Chatter.Messages
   alias Chatter.Models.Workspace
 
   alias ChatterWeb.WorkspacesListLive
@@ -17,10 +18,11 @@ defmodule ChatterWeb.WorkspacesViewLive do
     active_workspace = hd(workspaces)
 
     members = Workspaces.list_members_for_workspace(active_workspace)
-    active_member = hd(members)
 
     channels = Workspaces.list_channels_for_workspace(active_workspace)
     active_channel = hd(channels)
+
+    messages = Messages.list_messages_for_channel(active_channel)
 
     {:ok,
      assign(socket,
@@ -29,7 +31,8 @@ defmodule ChatterWeb.WorkspacesViewLive do
        members: members,
        active_member: nil,
        channels: channels,
-       active_channel: active_channel
+       active_channel: active_channel,
+       messages: messages
      )}
   end
 
@@ -77,7 +80,7 @@ defmodule ChatterWeb.WorkspacesViewLive do
             </div>
           <% end %>
         </div>
-        <div class="flex-1 p-6">messages</div>
+        <div class="flex-1 p-6"><%= render_messages(assigns) %></div>
         <div class="flex-none p-6">
           <.live_component
             id={:create_message}
@@ -90,6 +93,27 @@ defmodule ChatterWeb.WorkspacesViewLive do
         </div>
       </div>
     </div>
+    """
+  end
+
+  def render_messages(assigns) do
+    ~H"""
+    <ul>
+      <li :for={message <- @messages} class="flex mb-4">
+        <div class="w-10 h-10 rounded bg-gray-100 mr-4"></div>
+        <div class="flex flex-col">
+          <div class="flex">
+            <span class="font-semibold leading-3"><%= message.sender.username %></span>
+            <span class="ml-4 text-xs pb-0.5">
+              <%= Calendar.strftime(message.inserted_at, "%I:%M %p") %>
+            </span>
+          </div>
+          <div class="mt-1">
+            <%= message.text %>
+          </div>
+        </div>
+      </li>
+    </ul>
     """
   end
 
