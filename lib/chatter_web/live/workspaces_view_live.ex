@@ -51,12 +51,12 @@ defmodule ChatterWeb.WorkspacesViewLive do
 
   def render(assigns) do
     ~H"""
-    <div class="flex h-full border border-slate-700">
-      <aside class="w-16 h-full py-4 bg-slate-900 flex flex-col items-center">
+    <div class="flex h-full border border-zinc-700">
+      <aside class="w-16 h-full py-4 bg-zinc-900 flex flex-col items-center">
         <%= render_workspaces(assigns) %>
       </aside>
-      <div class="w-60 border-x border-slate-700 text-gray-300 overflow-auto">
-        <div class="font-semibold py-2 px-6 text-xl border-b border-slate-700 text-white sticky top-0 bg-slate-900">
+      <div class="w-60 border-x border-zinc-700 text-gray-300 overflow-auto">
+        <div class="font-semibold py-2 px-6 text-xl border-b border-zinc-700 text-white sticky top-0 bg-zinc-900">
           <%= @active_workspace.name %>
         </div>
         <div class="px-2">
@@ -67,7 +67,7 @@ defmodule ChatterWeb.WorkspacesViewLive do
         </div>
       </div>
       <div class="flex flex-col flex-1">
-        <div class="flex-none py-2 px-6 border-b border-slate-700 flex items-center">
+        <div class="flex-none py-2 px-6 border-b border-zinc-700 flex items-center">
           <%= if @active_channel != nil do %>
             <div class="text-gray-200 text-lg font-semibold">
               # <%= @active_channel.name %>
@@ -128,7 +128,7 @@ defmodule ChatterWeb.WorkspacesViewLive do
         <li :for={member <- @members}>
           <.link
             patch={~p"/workspaces/#{@active_workspace}/members/#{member}"}
-            class={"#{if assigns[:active_member] != nil and member.id == @active_member.id, do: "bg-slate-300 text-slate-800", else: "hover:bg-slate-700"} rounded px-4 py-0.5 w-full block hover:cursor-pointer"}
+            class={"#{if assigns[:active_member] != nil and member.id == @active_member.id, do: "bg-zinc-300 text-slate-800", else: "hover:bg-zinc-700"} rounded px-4 py-0.5 w-full block hover:cursor-pointer"}
           >
             # <%= member.username %>
           </.link>
@@ -138,7 +138,7 @@ defmodule ChatterWeb.WorkspacesViewLive do
         class="flex items-center hover:cursor-pointer hover:text-white mt-2 px-4"
         @click="$refs.members_dialog.showModal()"
       >
-        <div class="bg-slate-600 rounded h-4 w-4 mr-2 flex items-center justify-center">
+        <div class="bg-zinc-600 rounded h-4 w-4 mr-2 flex items-center justify-center">
           <.icon name="hero-plus" class="h-3 w-3 text-slate-400" />
         </div>
         <span>Add coworkers</span>
@@ -163,7 +163,7 @@ defmodule ChatterWeb.WorkspacesViewLive do
       <li :for={channel <- @channels}>
         <.link
           patch={~p"/workspaces/#{@active_workspace}/channels/#{channel}"}
-          class={"#{if @active_channel != nil and channel.id == @active_channel.id, do: "bg-slate-300 text-slate-800", else: "hover:bg-slate-700"} rounded px-4 py-0.5 w-full block hover:cursor-pointer"}
+          class={"#{if @active_channel != nil and channel.id == @active_channel.id, do: "bg-zinc-300 text-slate-800", else: "hover:bg-zinc-700"} rounded px-4 py-0.5 w-full block hover:cursor-pointer"}
         >
           # <%= channel.name %>
         </.link>

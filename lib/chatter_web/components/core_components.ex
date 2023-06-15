@@ -255,6 +255,7 @@ defmodule ChatterWeb.CoreComponents do
     doc: "a form field struct retrieved from the form, for example: @form[:email]"
   )
 
+  attr(:class, :string, default: nil, doc: "additional classes")
   attr(:errors, :list, default: [])
   attr(:checked, :boolean, doc: "the checked flag for checkbox inputs")
   attr(:prompt, :string, default: nil, doc: "the prompt for select inputs")
@@ -354,7 +355,8 @@ defmodule ChatterWeb.CoreComponents do
           "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
           "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
           "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400"
+          @errors != [] && "border-rose-400 focus:border-rose-400",
+          @class
         ]}
         {@rest}
       />

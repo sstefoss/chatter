@@ -15,7 +15,7 @@ defmodule ChatterWeb.ChannelsCreateLive do
         class="flex items-center hover:cursor-pointer hover:text-white mt-2 px-4"
         phx-click={show_modal("new-channel-modal")}
       >
-        <div class="bg-slate-600 rounded h-4 w-4 mr-2 flex items-center justify-center">
+        <div class="bg-zinc-600 rounded h-4 w-4 mr-2 flex items-center justify-center">
           <.icon name="hero-plus" class="h-3 w-3 text-slate-400" />
         </div>
         <span>Add channels</span>

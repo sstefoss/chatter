@@ -31,6 +31,7 @@ defmodule ChatterWeb.MessagesCreateLive do
           name="text"
           required
           autocomplete="off"
+          class="rounded p-4 bg-zinc-900 focus:border-zinc-700 border-zinc-700 phx-no-feedback:border-zinc-700 !text-gray-200"
         />
         <div class="hidden">
           <.input name="reset_input" id="reset_input" value="" type="reset" />
