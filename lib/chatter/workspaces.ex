@@ -6,6 +6,20 @@ defmodule Chatter.Workspaces do
   alias Chatter.Members
   alias Chatter.Models.Member
 
+  @pubsub Chatter.PubSub
+  @topic inspect(__MODULE__)
+
+  def subscribe do
+    Phoenix.PubSub.subscribe(@pubsub, @topic)
+  end
+
+  def broadcast({:ok, item}, tag) do
+    Phoenix.PubSub.broadcast(@pubsub, @topic, {tag, item})
+    {:ok, item}
+  end
+
+  def broadcast({:error, _changeset} = error, _tag), do: error
+
   def change_workspace(%Workspace{} = workspace, attrs \\ %{}) do
     Workspace.changeset(workspace, attrs)
   end
@@ -29,6 +43,7 @@ defmodule Chatter.Workspaces do
     %Workspace{}
     |> Workspace.changeset(attrs)
     |> Repo.insert()
+    |> broadcast(:workspace_created)
   end
 
   def launch_new_workspace(%User{} = user, attrs \\ %{}) do
@@ -80,7 +95,9 @@ defmodule Chatter.Workspaces do
     workspace
     |> Workspace.changeset(attrs)
     |> Repo.update()
+    |> broadcast(:workspace_updated)
   end
 
-  def delete_workspace(%Workspace{} = workspace), do: Repo.delete(workspace)
+  def delete_workspace(%Workspace{} = workspace),
+    do: Repo.delete(workspace) |> broadcast(:workspace_deleted)
 end
