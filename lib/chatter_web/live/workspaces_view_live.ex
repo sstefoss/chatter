@@ -8,7 +8,7 @@ defmodule ChatterWeb.WorkspacesViewLive do
 
   alias ChatterWeb.ChannelsCreateLive
   alias ChatterWeb.MessagesCreateLive
-  alias ChatterWeb.MembersCreateLive
+  alias ChatterWeb.InvitationsCreateLive
 
   import ChatterWeb.Workspace.Members
   import ChatterWeb.Workspace.Channels
@@ -95,8 +95,8 @@ defmodule ChatterWeb.WorkspacesViewLive do
         <div class="px-2">
           <.members active_member={@active_member} active_workspace={@active_workspace} members={@members} />
           <.live_component
-            id={:create_members}
-            module={MembersCreateLive}
+            id={:create_invitations}
+            module={InvitationsCreateLive}
             active_workspace={@active_workspace}
             current_user={@current_user}
           />

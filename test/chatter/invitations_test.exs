@@ -6,6 +6,7 @@ defmodule Chatter.InvitationsTest do
   import Chatter.AccountsFixtures
   import Chatter.WorkspacesFixtures
   import Chatter.InvitationsFixtures
+  import Chatter.MembersFixtures
 
   describe "get_invitation" do
     test "returns invitation with the given params" do
@@ -37,10 +38,12 @@ defmodule Chatter.InvitationsTest do
     test "creates a new invitation" do
       user = user_fixture()
       workspace = workspace_fixture(%{creator_id: user.id})
+      member = member_fixture_from_user_in_workspace(user, workspace)
 
       attrs = %{
         workspace_id: workspace.id,
-        email: user.email
+        email: user.email,
+        sender_id: member.id
       }
 
       assert {:ok, %Invitation{} = invitation} = Invitations.create_invitation(attrs)

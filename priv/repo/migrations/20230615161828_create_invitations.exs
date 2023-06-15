@@ -5,6 +5,7 @@ defmodule Chatter.Repo.Migrations.CreateInvitations do
     create table(:invitations) do
       add(:workspace_id, references(:workspaces, on_delete: :delete_all), null: false)
       add(:email, :string)
+      add(:sender_id, references(:members), null: false)
 
       timestamps()
     end

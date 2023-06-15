@@ -7,21 +7,25 @@ defmodule Chatter.Models.Member do
   alias Chatter.Models.Workspace
   alias Chatter.Models.Participant
   alias Chatter.Models.Channel
+  alias Chatter.Models.Message
+  alias Chatter.Models.Invitation
 
   @required_fields ~w(workspace_id user_id)a
   @optional_fields ~w(username fullname avatar role is_archived)a
 
   schema "members" do
-    field :username, :string
-    field :fullname, :string
-    field :avatar, :string
-    field :role, Ecto.Enum, values: [:admin, :moderator, :member], default: :member
-    field :is_archived, :boolean, default: false
+    field(:username, :string)
+    field(:fullname, :string)
+    field(:avatar, :string)
+    field(:role, Ecto.Enum, values: [:admin, :moderator, :member], default: :member)
+    field(:is_archived, :boolean, default: false)
 
-    belongs_to :workspace, Workspace
-    belongs_to :user, User
+    belongs_to(:workspace, Workspace)
+    belongs_to(:user, User)
 
-    many_to_many :channels, Channel, join_through: Participant
+    many_to_many(:channels, Channel, join_through: Participant)
+    has_many(:messages, Message)
+    has_many(:invitations, Invitation)
 
     timestamps()
   end

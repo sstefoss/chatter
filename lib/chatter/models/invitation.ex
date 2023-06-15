@@ -2,12 +2,16 @@ defmodule Chatter.Models.Invitation do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @required_fields ~w(workspace_id email)a
+  alias Chatter.Models.Member
+  alias Chatter.Models.Workspace
+
+  @required_fields ~w(workspace_id sender_id email)a
   @optional_fields ~w()a
 
   schema "invitations" do
     field(:email, :string)
     belongs_to(:workspace, Workspace)
+    belongs_to(:sender, Member, foreign_key: :sender_id)
 
     timestamps()
   end
