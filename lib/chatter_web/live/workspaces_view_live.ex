@@ -5,13 +5,24 @@ defmodule ChatterWeb.WorkspacesViewLive do
   alias Chatter.Channels
   alias Chatter.Members
   alias Chatter.Messages
-  alias Chatter.Models.Workspace
 
   alias ChatterWeb.ChannelsCreateLive
   alias ChatterWeb.MessagesCreateLive
   alias ChatterWeb.MembersCreateLive
 
+  import ChatterWeb.Workspace.Members
+  import ChatterWeb.Workspace.Channels
+  import ChatterWeb.Workspace.Messages
+  import ChatterWeb.Workspace.Workspaces
+
   def mount(_, _, socket) do
+    if connected?(socket) do
+      Channels.subscribe()
+      Workspaces.subscribe()
+      Members.subscribe()
+      Messages.subscribe()
+    end
+
     current_user = socket.assigns.current_user
 
     workspaces = Workspaces.list_workspaces_for_user(current_user)
@@ -49,18 +60,22 @@ defmodule ChatterWeb.WorkspacesViewLive do
 
   def handle_params(_, _, socket), do: {:noreply, socket}
 
+  def handle_info({:channel_created, channel}, socket) do
+    {:noreply, assign(socket, active_channel: channel)}
+  end
+
   def render(assigns) do
     ~H"""
     <div class="flex h-full border border-zinc-700">
       <aside class="w-16 h-full py-4 bg-zinc-900 flex flex-col items-center">
-        <%= render_workspaces(assigns) %>
+        <.workspaces workspaces={@workspaces} active_workspace={@active_workspace} />
       </aside>
       <div class="w-60 border-x border-zinc-700 text-gray-300 overflow-auto">
         <div class="font-semibold py-2 px-6 text-xl border-b border-zinc-700 text-white sticky top-0 bg-zinc-900">
           <%= @active_workspace.name %>
         </div>
         <div class="px-2">
-          <%= render_channels(assigns) %>
+          <.channels channels={@channels} active_channel={@active_channel} active_workspace={@active_workspace} />
           <.live_component
             id={:create_channel}
             module={ChannelsCreateLive}
@@ -69,7 +84,7 @@ defmodule ChatterWeb.WorkspacesViewLive do
           />
         </div>
         <div class="px-2">
-          <%= render_members(assigns) %>
+          <.members active_member={@active_member} active_workspace={@active_workspace} members={@members} />
           <.live_component
             id={:create_members}
             module={MembersCreateLive}
@@ -93,7 +108,7 @@ defmodule ChatterWeb.WorkspacesViewLive do
             </div>
           <% end %>
         </div>
-        <div class="flex-1 p-6"><%= render_messages(assigns) %></div>
+        <div class="flex-1 p-6"><.messages messages={@messages} /></div>
         <div class="flex-none p-6">
           <.live_component
             id={:create_message}
@@ -105,85 +120,6 @@ defmodule ChatterWeb.WorkspacesViewLive do
           />
         </div>
       </div>
-    </div>
-    """
-  end
-
-  def render_messages(assigns) do
-    ~H"""
-    <ul>
-      <li :for={message <- @messages} class="flex mb-4">
-        <div class="w-10 h-10 rounded bg-gray-100 mr-4"></div>
-        <div class="flex flex-col">
-          <div class="flex">
-            <span class="font-semibold leading-3"><%= message.sender.username %></span>
-            <span class="ml-4 text-xs pb-0.5">
-              <%= Calendar.strftime(message.inserted_at, "%I:%M %p") %>
-            </span>
-          </div>
-          <div class="mt-1">
-            <%= message.text %>
-          </div>
-        </div>
-      </li>
-    </ul>
-    """
-  end
-
-  def render_members(assigns) do
-    ~H"""
-    <div class="mt-8">
-      <div class="font-semibold px-4 py-2">
-        Direct messages
-      </div>
-      <ul class="mt-1">
-        <li :for={member <- @members}>
-          <.link
-            patch={~p"/workspaces/#{@active_workspace}/members/#{member}"}
-            class={"#{if assigns[:active_member] != nil and member.id == @active_member.id, do: "bg-zinc-300 text-slate-800", else: "hover:bg-zinc-700"} rounded px-4 py-0.5 w-full block hover:cursor-pointer"}
-          >
-            # <%= member.username %>
-          </.link>
-        </li>
-      </ul>
-    </div>
-    """
-  end
-
-  def render_channels(assigns) do
-    ~H"""
-    <div class="font-semibold mt-2 py-2 px-4">
-      Channels
-    </div>
-    <ul class="mt-1">
-      <li :for={channel <- @channels}>
-        <.link
-          patch={~p"/workspaces/#{@active_workspace}/channels/#{channel}"}
-          class={"#{if @active_channel != nil and channel.id == @active_channel.id, do: "bg-zinc-300 text-slate-800", else: "hover:bg-zinc-700"} rounded px-4 py-0.5 w-full block hover:cursor-pointer"}
-        >
-          # <%= channel.name %>
-        </.link>
-      </li>
-    </ul>
-    """
-  end
-
-  def render_workspaces(assigns) do
-    ~H"""
-    <ul>
-      <li :for={workspace <- @workspaces} class="mb-4">
-        <.link patch={~p"/workspaces/#{workspace}"}>
-          <img
-            src={workspace.icon_path}
-            class={"#{if workspace.id == @active_workspace.id, do: "border-gray-200", else: "border-gray-500"} hover:border-gray-200 border-2 rounded-lg w-10 h-10"}
-          />
-        </.link>
-      </li>
-    </ul>
-    <div class="mt-2">
-      <.link navigate={~p"/workspaces/create"} class="bg-gray-300 hover:bg-gray-100 rounded-lg p-2">
-        <.icon name="hero-plus" class="bg-gray-800 align-sub" />
-      </.link>
     </div>
     """
   end
