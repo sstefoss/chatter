@@ -5,18 +5,20 @@ defmodule Chatter.Models.Workspace do
   alias Chatter.Accounts.User
   alias Chatter.Models.Member
   alias Chatter.Models.Channel
+  alias Chatter.Models.Invitation
   alias Chatter.Iconify
 
   @required_fields ~w(name creator_id)a
 
   schema "workspaces" do
-    field :name, :string
-    field :icon_path, :string
-    belongs_to :creator, User
+    field(:name, :string)
+    field(:icon_path, :string)
+    belongs_to(:creator, User)
 
-    has_many :channels, Channel, on_delete: :delete_all
-    has_many :members, Member
-    has_many :users, through: [:members, :user]
+    has_many(:channels, Channel, on_delete: :delete_all)
+    has_many(:members, Member)
+    has_many(:users, through: [:members, :user])
+    has_many(:invitations, Invitation)
 
     timestamps()
   end
