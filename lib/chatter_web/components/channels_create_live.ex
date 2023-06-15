@@ -55,12 +55,9 @@ defmodule ChatterWeb.ChannelsCreateLive do
            workspace_id: active_workspace.id
          }) do
       {:ok, channel} ->
-        socket =
-          socket
-          |> push_event("js-exec", %{to: "#new-channel-modal", attr: "phx-remove"})
-          |> push_patch(to: ~p"/workspaces/#{active_workspace}/channels/#{channel}")
-
-        {:noreply, socket}
+        {:noreply,
+         socket
+         |> push_event("js-exec", %{to: "#new-channel-modal", attr: "phx-remove"})}
 
       {:error, changeset} ->
         {:noreply, assign(socket, channel_form: to_form(changeset))}

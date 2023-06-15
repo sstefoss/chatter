@@ -61,7 +61,16 @@ defmodule ChatterWeb.WorkspacesViewLive do
   def handle_params(_, _, socket), do: {:noreply, socket}
 
   def handle_info({:channel_created, channel}, socket) do
-    {:noreply, assign(socket, active_channel: channel)}
+    active_workspace = socket.assigns.active_workspace
+    channels = Workspaces.list_channels_for_workspace(active_workspace)
+
+    socket =
+      socket
+      |> push_patch(to: ~p"/workspaces/#{active_workspace}/channels/#{channel}")
+      |> assign(:active_channel, channel)
+      |> assign(:channels, channels)
+
+    {:noreply, socket}
   end
 
   def render(assigns) do
