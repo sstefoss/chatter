@@ -1,7 +1,6 @@
 defmodule Chatter.Channels do
   alias Chatter.Repo
   alias Chatter.Models.Channel
-  alias Chatter.Workspaces
 
   def change_channel(%Channel{} = channel, attrs \\ %{}) do
     Channel.changeset(channel, attrs)

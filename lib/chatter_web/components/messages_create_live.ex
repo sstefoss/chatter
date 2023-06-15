@@ -25,7 +25,13 @@ defmodule ChatterWeb.MessagesCreateLive do
         phx-hook="MessageForm"
         id="message_form"
       >
-        <.input field={@message_form[:text]} name="text" required autocomplete="off" />
+        <.input
+          field={@message_form[:text]}
+          id="message_input"
+          name="text"
+          required
+          autocomplete="off"
+        />
         <div class="hidden">
           <.input name="reset_input" id="reset_input" value="" type="reset" />
         </div>
