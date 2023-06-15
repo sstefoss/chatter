@@ -7,9 +7,9 @@ defmodule ChatterWeb.WorkspacesViewLive do
   alias Chatter.Messages
   alias Chatter.Models.Workspace
 
-  alias ChatterWeb.WorkspacesListLive
   alias ChatterWeb.ChannelsCreateLive
   alias ChatterWeb.MessagesCreateLive
+  alias ChatterWeb.MembersCreateLive
 
   def mount(_, _, socket) do
     current_user = socket.assigns.current_user
@@ -61,9 +61,21 @@ defmodule ChatterWeb.WorkspacesViewLive do
         </div>
         <div class="px-2">
           <%= render_channels(assigns) %>
+          <.live_component
+            id={:create_channel}
+            module={ChannelsCreateLive}
+            active_workspace={@active_workspace}
+            current_user={@current_user}
+          />
         </div>
         <div class="px-2">
           <%= render_members(assigns) %>
+          <.live_component
+            id={:create_members}
+            module={MembersCreateLive}
+            active_workspace={@active_workspace}
+            current_user={@current_user}
+          />
         </div>
       </div>
       <div class="flex flex-col flex-1">
@@ -120,7 +132,7 @@ defmodule ChatterWeb.WorkspacesViewLive do
 
   def render_members(assigns) do
     ~H"""
-    <div x-data class="mt-8">
+    <div class="mt-8">
       <div class="font-semibold px-4 py-2">
         Direct messages
       </div>
@@ -134,22 +146,6 @@ defmodule ChatterWeb.WorkspacesViewLive do
           </.link>
         </li>
       </ul>
-      <div
-        class="flex items-center hover:cursor-pointer hover:text-white mt-2 px-4"
-        @click="$refs.members_dialog.showModal()"
-      >
-        <div class="bg-zinc-600 rounded h-4 w-4 mr-2 flex items-center justify-center">
-          <.icon name="hero-plus" class="h-3 w-3 text-slate-400" />
-        </div>
-        <span>Add coworkers</span>
-      </div>
-      <dialog
-        x-ref="members_dialog"
-        class="p-4 shadow-xl w-1/2 backdrop:bg-gray-900 backdrop:bg-opacity-50 rounded"
-      >
-        <p>Members</p>
-        <button @click="$refs.members_dialog.close()">Close</button>
-      </dialog>
     </div>
     """
   end
@@ -169,12 +165,6 @@ defmodule ChatterWeb.WorkspacesViewLive do
         </.link>
       </li>
     </ul>
-    <.live_component
-      id={:create_channel}
-      module={ChannelsCreateLive}
-      active_workspace={@active_workspace}
-      current_user={@current_user}
-    />
     """
   end
 
