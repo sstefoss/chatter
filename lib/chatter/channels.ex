@@ -7,10 +7,6 @@ defmodule Chatter.Channels do
     Channel.changeset(channel, attrs)
   end
 
-  def list_messages(%Channel{} = channel) do
-    Repo.preload(channel, :messages).messages
-  end
-
   def list_participants(%Channel{} = _channel) do
   end
 

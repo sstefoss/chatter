@@ -13,11 +13,6 @@ defmodule Chatter.ChannelsTest do
     end
   end
 
-  describe "list_messages/2" do
-    test "returns the channel messages" do
-    end
-  end
-
   describe "get_channel/1" do
     test "returns the channel with the given id" do
       channel = channel_fixture()
