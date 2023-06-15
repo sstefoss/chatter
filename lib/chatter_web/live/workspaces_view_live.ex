@@ -22,6 +22,7 @@ defmodule ChatterWeb.WorkspacesViewLive do
       Workspaces.subscribe()
       Members.subscribe()
       Messages.subscribe()
+      Invitations.subscribe()
     end
 
     current_user = socket.assigns.current_user
@@ -88,6 +89,19 @@ defmodule ChatterWeb.WorkspacesViewLive do
       |> push_patch(to: ~p"/workspaces/#{active_workspace}/channels/#{channel}")
       |> assign(:active_channel, channel)
       |> assign(:channels, channels)
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:invitation_created, invitation}, socket) do
+    active_workspace = socket.assigns.active_workspace
+    invitations = Workspaces.list_invitations_for_workspace(active_workspace)
+
+    socket =
+      socket
+      |> push_patch(to: ~p"/workspaces/#{active_workspace}/invitations/#{invitation}")
+      |> assign(:active_invitation, invitation)
+      |> assign(:invitations, invitations)
 
     {:noreply, socket}
   end
