@@ -5,11 +5,11 @@ defmodule ChatterWeb.Workspace.Messages do
     ~H"""
     <ul>
       <li :for={message <- @messages} class="flex mb-4">
-        <div class="w-10 h-10 rounded bg-gray-100 mr-4"></div>
+        <div class="w-10 h-10 rounded bg-gray-500 mr-4"></div>
         <div class="flex flex-col">
-          <div class="flex">
+          <div class="flex items-baseline">
             <span class="font-semibold leading-3"><%= message.sender.username %></span>
-            <span class="ml-4 text-xs pb-0.5">
+            <span class="ml-4 text-xs">
               <%= Calendar.strftime(message.inserted_at, "%I:%M %p") %>
             </span>
           </div>

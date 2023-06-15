@@ -5,6 +5,7 @@ defmodule ChatterWeb.WorkspacesViewLive do
   alias Chatter.Channels
   alias Chatter.Members
   alias Chatter.Messages
+  alias Chatter.Invitations
 
   alias ChatterWeb.ChannelsCreateLive
   alias ChatterWeb.MessagesCreateLive
@@ -33,6 +34,8 @@ defmodule ChatterWeb.WorkspacesViewLive do
     channels = Workspaces.list_channels_for_workspace(active_workspace)
     active_channel = hd(channels)
 
+    invitations = Workspaces.list_invitations_for_workspace(active_workspace)
+
     messages = Messages.list_messages_for_channel(active_channel)
 
     {:ok,
@@ -43,19 +46,35 @@ defmodule ChatterWeb.WorkspacesViewLive do
        active_member: nil,
        channels: channels,
        active_channel: active_channel,
-       messages: messages
+       messages: messages,
+       invitations: invitations,
+       active_invitation: nil
      )}
   end
 
   def handle_params(%{"channel_id" => channel_id, "id" => _}, _uri, socket) do
     channel = Channels.get_channel(channel_id)
     messages = Messages.list_messages_for_channel(channel)
-    {:noreply, assign(socket, active_channel: channel, active_member: nil, messages: messages)}
+
+    {:noreply,
+     assign(socket,
+       active_channel: channel,
+       active_member: nil,
+       messages: messages,
+       active_invitation: nil
+     )}
   end
 
   def handle_params(%{"member_id" => member_id, "id" => _}, _uri, socket) do
     member = Members.get_member(member_id)
-    {:noreply, assign(socket, active_channel: nil, active_member: member)}
+    {:noreply, assign(socket, active_channel: nil, active_member: member, active_invitation: nil)}
+  end
+
+  def handle_params(%{"invitation_id" => invitation_id, "id" => _}, _uri, socket) do
+    invitation = Invitations.get_invitation_by_id(invitation_id)
+
+    {:noreply,
+     assign(socket, active_channel: nil, active_member: nil, active_invitation: invitation)}
   end
 
   def handle_params(_, _, socket), do: {:noreply, socket}
@@ -93,7 +112,13 @@ defmodule ChatterWeb.WorkspacesViewLive do
           />
         </div>
         <div class="px-2">
-          <.members active_member={@active_member} active_workspace={@active_workspace} members={@members} />
+          <.members
+            active_member={@active_member}
+            active_workspace={@active_workspace}
+            members={@members}
+            invitations={@invitations}
+            active_invitation={@active_invitation}
+          />
           <.live_component
             id={:create_invitations}
             module={InvitationsCreateLive}
@@ -104,16 +129,22 @@ defmodule ChatterWeb.WorkspacesViewLive do
       </div>
       <div class="flex flex-col flex-1">
         <div class="flex-none py-2 px-6 border-b border-zinc-700 flex items-center">
-          <%= if @active_channel != nil do %>
+          <%= if @live_action == :channels do %>
             <div class="text-gray-200 text-lg font-semibold">
               # <%= @active_channel.name %>
             </div>
             <div class="text-gray-400 ml-6 text-sm">
               <%= @active_channel.description %>
             </div>
-          <% else %>
+          <% end %>
+          <%= if @live_action == :members do %>
             <div class="text-gray-200 text-lg font-semibold">
-              # <%= @active_member.username %>
+              <%= @active_member.username %>
+            </div>
+          <% end %>
+          <%= if @live_action == :invitations do %>
+            <div class="text-gray-200 text-lg font-semibold">
+              <%= @active_invitation.email %>
             </div>
           <% end %>
         </div>

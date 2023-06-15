@@ -37,6 +37,10 @@ defmodule Chatter.Workspaces do
     Repo.preload(workspace, :channels).channels
   end
 
+  def list_invitations_for_workspace(workspace) do
+    Repo.preload(workspace, :invitations).invitations
+  end
+
   def get_workspace(id), do: Repo.get!(Workspace, id)
 
   def create_workspace(attrs \\ %{}) do

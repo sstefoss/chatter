@@ -28,6 +28,8 @@ defmodule Chatter.Invitations do
     |> Repo.one!()
   end
 
+  def get_invitation_by_id(id), do: Repo.get!(Invitation, id)
+
   def get_invitations_for_workspace(workspace) do
     Repo.preload(workspace, :invitations).invitations
   end
