@@ -38,12 +38,13 @@ defmodule ChatterWeb.WorkspacesViewLive do
 
   def handle_params(%{"channel_id" => channel_id, "id" => _}, _uri, socket) do
     channel = Channels.get_channel(channel_id)
-    {:noreply, assign(socket, active_channel: channel, active_member: nil)}
+    messages = Messages.list_messages_for_channel(channel)
+    {:noreply, assign(socket, active_channel: channel, active_member: nil, messages: messages)}
   end
 
   def handle_params(%{"member_id" => member_id, "id" => _}, _uri, socket) do
     member = Members.get_member(member_id)
-    {:noreply, assign(socket, active_member: member, active_channel: nil)}
+    {:noreply, assign(socket, active_channel: nil, active_member: member)}
   end
 
   def handle_params(_, _, socket), do: {:noreply, socket}
