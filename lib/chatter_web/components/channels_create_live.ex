@@ -21,18 +21,22 @@ defmodule ChatterWeb.ChannelsCreateLive do
         <span>Add channels</span>
       </div>
       <.modal id="new-channel-modal">
-        <h3 class="text-lg font-semibold mb-4">Create a channel</h3>
+        <h3 class="text-lg text-zinc-800 font-semibold mb-4">Create a channel</h3>
         <.simple_form
           for={@channel_form}
           id="channel_form"
           phx-submit="create_channel"
           phx-target={@myself}
         >
-          <.input field={@channel_form[:name]} label="Name" name="name" required />
-          <.input field={@channel_form[:description]} label="Description" name="description" />
+          <.input field={@channel_form[:name]} label="Name" name="name" autocomplete="off" required />
+          <.input
+            field={@channel_form[:description]}
+            label="Description"
+            name="description"
+            autocomplete="off"
+          />
           <:actions>
             <.button phx-disable-with="Creating...">Create</.button>
-            <.button phx-click={hide_modal("new-channel-modal")}>Cancel</.button>
           </:actions>
         </.simple_form>
       </.modal>

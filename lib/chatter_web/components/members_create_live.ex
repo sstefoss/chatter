@@ -21,17 +21,16 @@ defmodule ChatterWeb.MembersCreateLive do
         <span>Add coworkers</span>
       </div>
       <.modal id="new-members-modal">
-        <h3 class="text-lg font-semibold mb-4">Add a coworker</h3>
+        <h3 class="text-lg text-zinc-800 font-semibold mb-4">Add a coworker</h3>
         <.simple_form
           for={@members_form}
           id="members_form"
           phx-submit="add_members"
           phx-target={@myself}
         >
-          <.input field={@members_form[:name]} label="Name" name="name" required />
+          <.input field={@members_form[:name]} label="Name" name="name" autocomplete="off" required />
           <:actions>
             <.button phx-disable-with="Creating...">Create</.button>
-            <.button phx-click={hide_modal("new-members-modal")}>Cancel</.button>
           </:actions>
         </.simple_form>
       </.modal>
