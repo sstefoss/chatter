@@ -21,4 +21,8 @@ defmodule Chatter.Messages do
   end
 
   def delete_message(%Message{} = message), do: Repo.delete(message)
+
+  def list_messages_for_channel(%Channel{} = channel) do
+    Repo.preload(channel, :messages).messages
+  end
 end

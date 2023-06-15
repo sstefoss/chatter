@@ -1,7 +1,6 @@
 defmodule Chatter.MessagesTest do
   use Chatter.DataCase
 
-  alias Chatter.Workspaces
   alias Chatter.Members
   alias Chatter.Messages
   alias Chatter.Models.Message
@@ -94,6 +93,20 @@ defmodule Chatter.MessagesTest do
 
       assert {:ok, %Message{}} = Messages.delete_message(message)
       assert_raise Ecto.NoResultsError, fn -> Messages.get_message(message.id) end
+    end
+  end
+
+  describe "list_messages_for_channel" do
+    test "returns the messages sent in the channel given in the params" do
+      user = user_fixture()
+      workspace = workspace_fixture(%{creator_id: user.id})
+      member = member_fixture_from_user_in_workspace(user, workspace)
+      channel = channel_fixture(workspace)
+      message = message_fixture(member, channel)
+
+      messages = Messages.list_messages_for_channel(channel)
+      assert length(messages) == 1
+      assert hd(messages) == message
     end
   end
 end
