@@ -60,6 +60,7 @@ defmodule ChatterWeb.Router do
 
     live_session :require_authenticated_user,
       on_mount: [{ChatterWeb.UserAuth, :ensure_authenticated}] do
+      live("/invitations/accept/:id", InvitationsAcceptLive, :accept)
       live("/workspaces", WorkspacesLive)
       live("/workspaces/create", WorkspacesCreateLive)
       live("/workspaces/:id", WorkspacesViewLive, :workspace)

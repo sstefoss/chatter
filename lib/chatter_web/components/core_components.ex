@@ -653,7 +653,7 @@ defmodule ChatterWeb.CoreComponents do
 
   def card(assigns) do
     ~H"""
-    <div class={["border border-gray-700 bg-gray-800 p-10 rounded-lg", @class]}>
+    <div class={["border border-zinc-700 bg-zinc-800 p-10 rounded-lg", @class]}>
       <%= render_slot(@inner_block) %>
     </div>
     """
