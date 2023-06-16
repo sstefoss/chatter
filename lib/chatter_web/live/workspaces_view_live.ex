@@ -80,6 +80,10 @@ defmodule ChatterWeb.WorkspacesViewLive do
 
   def handle_params(_, _, socket), do: {:noreply, socket}
 
+  def handle_info({:message_created, message}, socket) do
+    {:noreply, socket}
+  end
+
   def handle_info({:channel_created, channel}, socket) do
     active_workspace = socket.assigns.active_workspace
     channels = Workspaces.list_channels_for_workspace(active_workspace)
@@ -105,6 +109,8 @@ defmodule ChatterWeb.WorkspacesViewLive do
 
     {:noreply, socket}
   end
+
+  def handle_info(_, socket), do: {:noreply, socket}
 
   def render(assigns) do
     ~H"""
@@ -168,6 +174,7 @@ defmodule ChatterWeb.WorkspacesViewLive do
             id={:create_message}
             module={MessagesCreateLive}
             current_user={@current_user}
+            active_workspace={@active_workspace}
             active_member={@active_member}
             active_channel={@active_channel}
             live_action={@live_action}
