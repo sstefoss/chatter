@@ -3,6 +3,7 @@ defmodule ChatterWeb.MessagesCreateLive do
 
   alias Chatter.Utils
   alias Chatter.Messages
+  alias Chatter.Members
   alias Chatter.Models.Message
 
   def mount(socket) do
@@ -40,6 +41,9 @@ defmodule ChatterWeb.MessagesCreateLive do
 
   def handle_event("create_message", %{"text" => text}, socket) do
     current_user = socket.assigns.current_user
+    active_workspace = socket.assigns.active_workspace
+
+    sender = Members.get_member_for_user_in_workspace(current_user, active_workspace)
 
     channel_id =
       if socket.assigns.active_channel != nil, do: socket.assigns.active_channel.id, else: nil
@@ -48,7 +52,7 @@ defmodule ChatterWeb.MessagesCreateLive do
       if socket.assigns.active_member != nil, do: socket.assigns.active_member.id, else: nil
 
     %{
-      sender_id: current_user.id,
+      sender_id: sender.id,
       text: text
     }
     |> Utils.maybe_put(:recipient_id, member_id)
