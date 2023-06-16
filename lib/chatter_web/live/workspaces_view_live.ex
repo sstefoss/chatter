@@ -6,6 +6,9 @@ defmodule ChatterWeb.WorkspacesViewLive do
   alias Chatter.Members
   alias Chatter.Messages
   alias Chatter.Invitations
+  alias Chatter.Models.Message
+  alias Chatter.Models.Channel
+  alias Chatter.Models.Member
 
   alias ChatterWeb.ChannelsCreateLive
   alias ChatterWeb.MessagesCreateLive
@@ -81,8 +84,30 @@ defmodule ChatterWeb.WorkspacesViewLive do
   def handle_params(_, _, socket), do: {:noreply, socket}
 
   def handle_info({:message_created, message}, socket) do
+    live_action = socket.assigns.live_action
+    active_channel = socket.assigns.active_channel
+    active_member = socket.assigns.active_member
+
+    handle_message_created(message, active_channel, active_member, socket)
+  end
+
+  # message was sent to channel
+  def handle_message_created(%Message{recipient_id: nil} = message, %Channel{} = active_channel, _, socket) do
+    case message.channel_id == active_channel.id do
+      true ->
+        messages = Messages.list_messages_for_channel(active_channel)
+        {:noreply, assign(socket, messages: messages)}
+
+      false -> {:noreply, socket}
+    end
+  end
+  def handle_message_created(%Message{recipient_id: nil} = message, nil, _, socket), do: {:noreply, socket}
+
+  # message was sent to user
+  def handle_message_created(%Message{channel_id: nil} = message, _, %Member{} = active_member, socket) do
     {:noreply, socket}
   end
+  def handle_message_created(%Message{channel_id: nil} = message, _, nil, socket), do: {:noreply, socket}
 
   def handle_info({:channel_created, channel}, socket) do
     active_workspace = socket.assigns.active_workspace
