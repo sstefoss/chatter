@@ -30,6 +30,21 @@ defmodule ChatterWeb.WorkspacesLive do
           <p class="font-light text-gray-500 lg:mb-16 sm:text-xl dark:text-gray-400">
             Choose a workspace below to get back to working with your team.
           </p>
+          <ul>
+            <li :for={workspace <- @workspaces}>
+              <.link navigate={~p"/workspaces/#{workspace}"}>
+                <.card class="p-4 hover:border-gray-200">
+                  <div class="flex items-center">
+                    <img
+                    src={workspace.icon_path}
+                    class="border-gray-500 border-2 rounded-lg mr-4 w-14 h-14"
+                    />
+                    <h3 class="text-2xl dark:text-gray-100 font-bold"><%= workspace.name %></h3>
+                  </div>
+                </.card>
+              </.link>
+            </li>
+          </ul>
         <% end %>
       </div>
     </.center>

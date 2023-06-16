@@ -2,7 +2,6 @@ defmodule ChatterWeb.HomeLive do
   use ChatterWeb, :live_view
 
   def mount(_params, _session, socket) do
-    IO.inspect(socket.assigns)
     {:ok, socket}
   end
 
