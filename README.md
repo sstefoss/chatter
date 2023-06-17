@@ -9,6 +9,7 @@ There probably a lot of antipatterns used so don't use it as a repo to learn fro
 Missing:
 - Direct messages
 - Edit user profile
+- User avatars
 - Mentions
 - Edit channel
 - Edit message
