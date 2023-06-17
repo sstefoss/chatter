@@ -193,7 +193,7 @@ defmodule ChatterWeb.WorkspacesViewLive do
             </div>
           <% end %>
         </div>
-        <div class="flex-1 p-6"><.messages messages={@messages} /></div>
+        <div class="flex-1 p-6 overflow-auto"><.messages messages={@messages} /></div>
         <div class="flex-none p-6">
           <.live_component
             id={:create_message}
