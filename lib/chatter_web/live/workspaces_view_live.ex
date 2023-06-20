@@ -119,7 +119,14 @@ defmodule ChatterWeb.WorkspacesViewLive do
 
   # message was sent to user
   def handle_message_created(%Message{channel_id: nil} = message, _, %Member{} = active_member, socket) do
-    {:noreply, socket}
+    case message.recipient_id == active_member.id or message.sender_id == active_member.id do
+      true ->
+        current_user = Members.get_member_for_user_in_workspace(socket.assigns.current_user, socket.assigns.active_workspace)
+        messages = Messages.list_messages_between_members(current_user, active_member)
+        {:noreply, assign(socket, messages: messages)}
+
+      false -> {:noreply, socket}
+    end
   end
   def handle_message_created(%Message{channel_id: nil} = message, _, nil, socket), do: {:noreply, socket}
 
