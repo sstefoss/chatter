@@ -2,7 +2,8 @@ defmodule Chatter.Messages do
   alias Chatter.Repo
   alias Chatter.Models.Message
   alias Chatter.Models.Channel
-  # alias Chatter.Models.Member
+  alias Chatter.Models.Member
+  import Ecto.Query
 
   @pubsub Chatter.PubSub
   @topic inspect(__MODULE__)
@@ -45,7 +46,18 @@ defmodule Chatter.Messages do
     Repo.preload(channel, messages: [:sender]).messages
   end
 
-  # def list_messages_for_member(%Member{} = member) do
-  #   Repo.preload(member, :messages).messages
-  # end
+  def list_messages_between_members(%Member{} = m1, %Member{} = m2) do
+    sender_m1_id = m1.id;
+    recipient_m1_id = m1.id;
+    sender_m2_id = m2.id;
+    recipient_m2_id = m2.id;
+
+    query =
+      from(message in Message,
+        where: (message.recipient_id == ^recipient_m1_id and message.sender_id == ^sender_m2_id) or
+               (message.recipient_id == ^recipient_m2_id and message.sender_id == ^sender_m1_id)
+      )
+    |> Repo.all
+    |> Repo.preload(:sender)
+  end
 end

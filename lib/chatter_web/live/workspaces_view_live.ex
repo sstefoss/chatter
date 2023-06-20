@@ -71,14 +71,28 @@ defmodule ChatterWeb.WorkspacesViewLive do
 
   def handle_params(%{"member_id" => member_id, "id" => _}, _uri, socket) do
     member = Members.get_member(member_id)
-    {:noreply, assign(socket, active_channel: nil, active_member: member, active_invitation: nil)}
+    current_user = Members.get_member_for_user_in_workspace(socket.assigns.current_user, socket.assigns.active_workspace)
+    messages = Messages.list_messages_between_members(current_user, member)
+
+    {:noreply,
+      assign(socket,
+        active_channel: nil,
+        active_member: member,
+        active_invitation: nil,
+        messages: messages
+      )}
   end
 
   def handle_params(%{"invitation_id" => invitation_id, "id" => _}, _uri, socket) do
     invitation = Invitations.get_invitation_by_id(invitation_id)
 
     {:noreply,
-     assign(socket, active_channel: nil, active_member: nil, active_invitation: invitation)}
+      assign(socket,
+        active_channel: nil,
+        active_member: nil,
+        active_invitation: invitation,
+        messages: nil
+      )}
   end
 
   def handle_params(_, _, socket), do: {:noreply, socket}

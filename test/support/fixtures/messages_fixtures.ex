@@ -18,8 +18,8 @@ defmodule Chatter.MessagesFixtures do
 
   def message_fixture(%Member{} = member1, %Member{} = member2) do
     attrs_message = %{
-      recipient_id: member1.id,
-      sender_id: member2.id
+      sender_id: member1.id,
+      recipient_id: member2.id
     }
 
     {:ok, message} =

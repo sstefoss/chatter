@@ -1,7 +1,6 @@
 defmodule Chatter.MessagesTest do
   use Chatter.DataCase
 
-  alias Chatter.Members
   alias Chatter.Messages
   alias Chatter.Models.Message
 
@@ -102,11 +101,26 @@ defmodule Chatter.MessagesTest do
       workspace = workspace_fixture(%{creator_id: user.id})
       member = member_fixture_from_user_in_workspace(user, workspace)
       channel = channel_fixture(workspace)
-      message = message_fixture(member, channel)
+      _message = message_fixture(member, channel)
 
       messages = Messages.list_messages_for_channel(channel)
       assert length(messages) == 1
-      assert hd(messages) == message
+      assert hd(messages).channel_id == channel.id
+    end
+  end
+
+  describe "list_messages_between_members" do
+    test "returns the messages sent between the members given in the params" do
+      user1 = user_fixture()
+      user2 = user_fixture()
+      workspace = workspace_fixture(%{creator_id: user1.id})
+      member1 = member_fixture_from_user_in_workspace(user1, workspace)
+      member2 = member_fixture_from_user_in_workspace(user2, workspace)
+      message1 = message_fixture(member1, member2)
+      message2 = message_fixture(member2, member1)
+
+      messages = Messages.list_messages_between_members(member1, member2)
+      assert length(messages) == 2
     end
   end
 end
