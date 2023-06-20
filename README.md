@@ -7,7 +7,6 @@ A Slack like chat platform built with Elixir/Phoenix for learning purposes.
 There probably a lot of antipatterns used so don't use it as a repo to learn from.
 
 Missing:
-- Direct messages
 - Edit user profile
 - User avatars
 - Mentions
